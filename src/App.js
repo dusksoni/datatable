@@ -1,23 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import { useState } from "react";
+import { useEffect } from "react";
 
 function App() {
+  useEffect(() => {
+    initialload();
+  }, []);
+
+  const [value, setvalue] = useState([]);
+
+  const initialload = () => {
+    fetch("https://www.gimbooks.com/v4/master/city/?query=Rai", {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((data) => setvalue(data?.results))
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <table>
+        <thead>
+          <th><td>
+            ID
+            </td>
+            </th>
+          <th><td>
+            Name
+            </td>
+            </th>
+        </thead>
+        <tbody>
+          {value.map((item) => (
+            <tr>
+              <td>{item.id}</td>
+              <td>{item.name}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
